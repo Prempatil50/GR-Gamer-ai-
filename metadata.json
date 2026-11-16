@@ -1,0 +1,6 @@
+{
+  "name": "Aurora AI Studio",
+  "description": "A Gemini-powered conversational AI workspace with Google Sign-In, Firebase sync, voice commands, spoken voice replies, customizable background themes, and dedicated opportunity pages.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,352 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile and personalized workspace preferences.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the user."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 120,
+          "description": "Display name from Google account."
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 254,
+          "description": "Verified email address."
+        },
+        "photoURL": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 500,
+          "description": "Avatar URL."
+        },
+        "themePreset": {
+          "type": "string",
+          "enum": ["alabaster", "obsidian", "midnight", "sage", "sand", "custom"],
+          "description": "Selected workspace background theme preset."
+        },
+        "customBgColor": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 7,
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "description": "Custom hex background color."
+        },
+        "voiceReplyEnabled": {
+          "type": "boolean",
+          "description": "Whether AI responses are automatically spoken aloud."
+        },
+        "voiceName": {
+          "type": "string",
+          "enum": ["Kore", "Zephyr", "Puck", "Charon", "Fenrir", "Orus"],
+          "description": "Preferred Gemini TTS voice persona."
+        },
+        "preferredLanguage": {
+          "type": "string",
+          "enum": ["auto", "en", "hi", "hinglish", "bn", "mr", "ta", "te", "gu", "pa", "ur", "es", "fr", "ar"],
+          "description": "Preferred conversation and voice language."
+        },
+        "voiceAutoSend": {
+          "type": "boolean",
+          "description": "Whether spoken voice commands automatically send after recording finishes."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last updated timestamp."
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "email",
+        "photoURL",
+        "themePreset",
+        "customBgColor",
+        "voiceReplyEnabled",
+        "voiceName",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatPage": {
+      "title": "ChatPage",
+      "description": "An AI workspace page or conversation thread.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140,
+          "description": "Page title."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["general", "opportunity", "coding", "learning", "writing", "custom"],
+          "description": "Workspace page category."
+        },
+        "systemInstruction": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 4000,
+          "description": "Optional system instruction shaping AI behavior for this page."
+        },
+        "pinned": {
+          "type": "boolean",
+          "description": "Whether the page is pinned in the sidebar."
+        },
+        "messageCount": {
+          "type": "integer",
+          "description": "Count of messages in this page."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last updated timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "category",
+        "systemInstruction",
+        "pinned",
+        "messageCount",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A single user or model message inside a ChatPage.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "pageId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Parent ChatPage ID."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "model"],
+          "description": "Message author role."
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32000,
+          "description": "Markdown text content of the message."
+        },
+        "usedVoice": {
+          "type": "boolean",
+          "description": "Whether the message originated from voice command."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "pageId",
+        "role",
+        "content",
+        "usedVoice",
+        "createdAt"
+      ]
+    },
+    "OpportunityTemplate": {
+      "title": "OpportunityTemplate",
+      "description": "User-saved custom page template or opportunity workspace.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Opportunity title."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400,
+          "description": "Brief summary of what this opportunity workspace helps achieve."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["opportunity", "coding", "learning", "writing", "custom"],
+          "description": "Template category."
+        },
+        "systemInstruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "description": "Prompt instructions applied to new pages created from this template."
+        },
+        "starterPrompt": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 1000,
+          "description": "Optional starter prompt pre-filled when launching."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "description",
+        "category",
+        "systemInstruction",
+        "starterPrompt",
+        "createdAt"
+      ]
+    },
+    "YouTubeChannel": {
+      "title": "YouTubeChannel",
+      "description": "Connected YouTube channel profile and recent video feed for AI creator workflows.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "channelId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "YouTube channel ID."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "YouTube channel name."
+        },
+        "handle": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 100,
+          "description": "YouTube @handle."
+        },
+        "channelUrl": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Canonical YouTube channel URL."
+        },
+        "avatarUrl": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 500,
+          "description": "YouTube channel avatar image URL."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 1000,
+          "description": "YouTube channel description."
+        },
+        "recentVideos": {
+          "type": "array",
+          "description": "Up to 15 recent videos fetched from the channel feed."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last updated timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "channelId",
+        "title",
+        "handle",
+        "channelUrl",
+        "avatarUrl",
+        "description",
+        "recentVideos",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile, theme customization, and voice settings."
+    },
+    "/users/{userId}/pages/{pageId}": {
+      "schema": { "$ref": "#/entities/ChatPage" },
+      "description": "User AI chat pages and opportunity workspaces."
+    },
+    "/users/{userId}/pages/{pageId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Conversation messages belonging to a specific user ChatPage."
+    },
+    "/users/{userId}/opportunities/{opportunityId}": {
+      "schema": { "$ref": "#/entities/OpportunityTemplate" },
+      "description": "Custom page templates and opportunity modes saved by the user."
+    },
+    "/users/{userId}/youtubeChannels/{channelId}": {
+      "schema": { "$ref": "#/entities/YouTubeChannel" },
+      "description": "Connected YouTube channels and recent uploads synced per user."
+    }
+  }
+}
